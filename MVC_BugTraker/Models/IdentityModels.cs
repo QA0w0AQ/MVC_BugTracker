@@ -43,5 +43,7 @@ namespace MVC_BugTraker.Models
 
         public DbSet<Projects>Projects { get; set; }
         public DbSet<Tickets> Tickets { get; set; }
+
+   
     }
 }
