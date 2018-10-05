@@ -1,0 +1,21 @@
+﻿@model MVC_BugTraker.Models.ProjectsAssign
+
+@{
+    ViewBag.Title = "Assign";
+}
+<div id="content">
+
+    <div id="content-header">
+        <div id="breadcrumb"> <a href="~/" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a></div>
+    </div>
+    <div class="container-fluid">
+        <h2>Assign</h2>
+        @using (Html.BeginForm())
+        {
+            @Html.HiddenFor(p => p.Id);
+            @Html.ListBoxFor(p => p.SelectedUsers, Model.UserList);
+
+            <input type="submit" value="Submit" class="btn btn-success" />
+        }
+    </div>
+</div>

@@ -115,6 +115,46 @@ namespace MVC_BugTraker.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult Assign(int id)
+        {
+            var model = new ProjectsAssign();
+
+            model.Id = id;
+            var project = db.Projects.FirstOrDefault(p=>p.Id ==id);
+            var users = db.Users.ToList();
+            var userIdsAssignedToProject = project.Users.Select(p => p.Id).ToList();
+
+            model.UserList = new MultiSelectList(users, "Id", "DisplayName", userIdsAssignedToProject);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Assign(ProjectsAssign model)
+        {
+            var project = db.Projects.FirstOrDefault(p => p.Id == model.Id);
+            var assignedUsers = project.Users.ToList();
+
+            foreach (var user in assignedUsers)
+            {
+                project.Users.Remove(user);
+            }
+
+            if (model.SelectedUsers != null)
+            {
+                foreach (var userId in model.SelectedUsers)
+                {
+                    var user = db.Users.FirstOrDefault(p => p.Id == userId);
+
+                    project.Users.Add(user);
+                }
+            }
+
+            db.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

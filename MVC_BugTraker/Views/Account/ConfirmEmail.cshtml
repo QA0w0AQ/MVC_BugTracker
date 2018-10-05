@@ -1,10 +1,17 @@
 ﻿@{
     ViewBag.Title = "Confirm Email";
 }
+<div id="content">
 
-<h2>@ViewBag.Title.</h2>
-<div>
-    <p>
-        Thank you for confirming your email. Please @Html.ActionLink("Click here to Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
-    </p>
+    <div id="content-header">
+        <div id="breadcrumb"> <a href="~/" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a></div>
+    </div>
+    <div class="container-fluid">
+        <h2>@ViewBag.Title.</h2>
+        <div>
+            <p>
+                Thank you for confirming your email. Please @Html.ActionLink("Click here to Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+            </p>
+        </div>
+    </div>
 </div>

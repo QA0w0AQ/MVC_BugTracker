@@ -13,6 +13,13 @@ namespace MVC_BugTraker.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string DisplayName { get; set; }
+        public string Name { get; set; }
+
+        public ApplicationUser()
+        {
+            ProjectsTicket = new HashSet<Tickets>();
+        }
+        public virtual ICollection<Tickets> ProjectsTicket { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
@@ -20,13 +27,7 @@ namespace MVC_BugTraker.Models
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
             // Add custom user claims here
             return userIdentity;
-        }
-
-        public ApplicationUser()
-        {
-            ProjectsTicket = new HashSet<Tickets>();
-        }
-        public virtual ICollection<Tickets> ProjectsTicket { get; set; }
+        }   
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>

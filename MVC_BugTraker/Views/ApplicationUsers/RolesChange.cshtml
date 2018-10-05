@@ -1,0 +1,22 @@
+﻿@model MVC_BugTraker.Models.UserRoles
+@{
+    ViewBag.Title = "RolesChange";
+}
+
+<h2>View</h2>
+
+<div id="content">
+
+    <div id="content-header">
+        <div id="breadcrumb"> <a href="~/" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a></div>
+    </div>
+    <div class="container-fluid">
+        @using (Html.BeginForm())
+        {
+            @Html.HiddenFor(p => p.Id);
+            @Html.ListBoxFor(p => p.SelectedRoles, Model.Roles);
+
+            <input type="submit" value="Submit" class="btn btn-success"/>
+        }
+    </div>
+</div>

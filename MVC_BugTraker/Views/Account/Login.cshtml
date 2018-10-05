@@ -23,7 +23,7 @@
         {
             @Html.AntiForgeryToken()
 
-            <div class="control-group normal_text"> <h3><img src="~/Image/logo.png" alt="Logo" /></h3></div>
+            <div class="control-group normal_text"> <h3><img src="~/Img/logo.png" alt="Logo" /></h3></div>
             <div class="control-group">
                 <div class="controls">
                     <div class="main_input_box">
@@ -57,7 +57,11 @@
                 <span class="pull-right"><button type="submit" class="btn btn-success">Login</button></span>
             </div>
         }
-        <form id="recoverform" action="#" class="form-vertical">
+
+
+        @using (Html.BeginForm("ForgotPassword", "Account", FormMethod.Post, new { @class = "form-vertical", role = "form", id = "recoverform" }))
+        {
+            @Html.AntiForgeryToken()
             <p class="normal_text">Enter your e-mail address below and we will send you instructions how to recover a password.</p>
 
             <div class="controls">
@@ -68,26 +72,13 @@
                 </div>
             </div>
             <div class="form-actions">
-                <span class="pull-left"><a href="#" class="flip-link btn btn-success" id="to-login">&laquo; Back to login</a></span>
                 <span class="pull-right"><input type="submit" class="btn btn-info" value="Recover" /></span>
-            </div>
-
-
-            @*<p class="normal_text">Enter your e-mail address below and we will send you instructions how to recover a password.</p>
-
-            <div class="controls">
-                <div class="main_input_box">
-                    <span class="add-on bg_lo"><i class="icon-envelope"></i></span>
-                    @Html.TextBoxFor(m => m.Email, new { placeholder = "E-mail address" })<br>
-                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-warning" })
-                </div>
-            </div>
-
-            <div class="form-actions">
                 <span class="pull-left"><a href="#" class="flip-link btn btn-success" id="to-login">&laquo; Back to login</a></span>
-                <span class="pull-right"><a class="btn btn-info">Recover</a></span>
-            </div>*@
-        </form>
+
+            </div>
+        }
+
+
     </div>
 
     <script src="~/Scripts/jquery.min.js"></script>
