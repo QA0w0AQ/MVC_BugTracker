@@ -24,7 +24,7 @@ namespace MVC_BugTraker.Controllers
             return View(db.Users.ToList());
         }
 
-       
+        [Authorize(Roles = "Admin")]
         public ActionResult RolesChange(string id)
         {
             var model = new UserRoles();
@@ -46,6 +46,7 @@ namespace MVC_BugTraker.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public ActionResult RolesChange(UserRoles model)
         {
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));

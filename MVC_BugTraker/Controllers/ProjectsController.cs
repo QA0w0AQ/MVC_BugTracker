@@ -46,6 +46,7 @@ namespace MVC_BugTraker.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,ProjectManager")]
         public ActionResult Create([Bind(Include = "Id,Name")] Projects projects)
         {
             if (ModelState.IsValid)
@@ -59,6 +60,7 @@ namespace MVC_BugTraker.Controllers
         }
 
         // GET: Projects/Edit/5
+        [Authorize(Roles = "Admin,ProjectManager")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -78,6 +80,7 @@ namespace MVC_BugTraker.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,ProjectManager")]
         public ActionResult Edit([Bind(Include = "Id,Name")] Projects projects)
         {
             if (ModelState.IsValid)
@@ -115,6 +118,7 @@ namespace MVC_BugTraker.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "Admin,ProjectManager")]
         public ActionResult Assign(int id)
         {
             var model = new ProjectsAssign();
@@ -130,6 +134,7 @@ namespace MVC_BugTraker.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,ProjectManager")]
         public ActionResult Assign(ProjectsAssign model)
         {
             var project = db.Projects.FirstOrDefault(p => p.Id == model.Id);
