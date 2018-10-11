@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -165,6 +166,7 @@ namespace MVC_BugTraker.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    await this.UserManager.AddToRoleAsync(user.Id, "Submitter");
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
 
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
@@ -411,6 +413,19 @@ namespace MVC_BugTraker.Controllers
         public ActionResult ExternalLoginFailure()
         {
             return View();
+        }
+
+
+        [AllowAnonymous]
+        public ActionResult MyProfile(MyProfileViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                return View();
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
         }
 
         protected override void Dispose(bool disposing)

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -17,9 +18,18 @@ namespace MVC_BugTraker.Models
 
         public ApplicationUser()
         {
-            ProjectsTicket = new HashSet<Tickets>();
+            Projects = new HashSet<Projects>();
+            TicketsCreated = new HashSet<Tickets>();
+            TicketsAssigned = new HashSet<Tickets>();
         }
-        public virtual ICollection<Tickets> ProjectsTicket { get; set; }
+
+        public virtual ICollection<Projects> Projects { get; set; }
+
+        [InverseProperty("OwnerUser")]
+        public virtual ICollection<Tickets> TicketsCreated { get; set; }
+
+        [InverseProperty("AssignedToUser")]
+        public virtual ICollection<Tickets> TicketsAssigned { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
@@ -42,9 +52,11 @@ namespace MVC_BugTraker.Models
             return new ApplicationDbContext();
         }
 
-        public DbSet<Projects>Projects { get; set; }
+        public DbSet<Projects> Projects { get; set; }
         public DbSet<Tickets> Tickets { get; set; }
+        public DbSet<TicketPriority> TicketPriority { get; set;}
+        public DbSet<TicketStatus> TicketStatus { get; set; }
+        public DbSet<TicketType> TicketType { get; set; }
 
-   
     }
 }

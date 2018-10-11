@@ -133,4 +133,32 @@ namespace MVC_BugTraker.Models
         [Display(Name = "Email")]
         public string Email { get; set; }
     }
+
+    public class MyProfileViewModel
+    {
+        [Required]
+        [Display(Name = "Profile")]
+        public string Profile { get; set; }
+
+        [Required]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
+        [Required]
+        [Display(Name = "Gender")]
+        public string Gender { get; set; }
+
+        [Required]
+        [Display(Name = "DisplyName")]
+        public string DisplyName { get; set; }
+
+        [Display(Name = "Birth")]
+        public string Birth { get; set; }
+
+        [Display(Name = "CompanyInfo")]
+        public string CompanyInfo { get; set; }
+
+        [Display(Name = "Description ")]
+        public string Description { get; set; }
+    }
 }

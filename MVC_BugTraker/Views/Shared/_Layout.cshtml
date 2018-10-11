@@ -28,16 +28,16 @@
                     <i class="icon icon-user"></i><span class="text"> Welcome @User.Identity.Name !</span><b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a href="~/projects/index"><i class="icon-user"></i> My Profile</a></li>
+                    <li><a href="~/Account/MyProfile"><i class="icon-user"></i> My Profile</a></li>
                     <li class="divider"></li>
                     <li><a href="#"><i class="icon-check"></i> My Tasks</a></li>
                     <li class="divider"></li>
                     @if (Request.IsAuthenticated)
-                                {
-                                    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, htmlAttributes: new { id = "logoutForm", @class = "navbar-right", @style = "padding: 3px 10px;color: #666;font - size: 12px" }))
+                    {
+                        using (Html.BeginForm("LogOff", "Account", FormMethod.Post, htmlAttributes: new { id = "logoutForm", @class = "navbar-right", @style = "padding: 3px 10px;color: #666;font - size: 12px" }))
                         {
-                                        @Html.AntiForgeryToken()
-                                        <li><a href="javascript:document.getElementById('logoutForm').submit()"><i class="icon icon-key"></i> Log off</a></li>
+                            @Html.AntiForgeryToken()
+                            <li><a href="javascript:document.getElementById('logoutForm').submit()"><i class="icon icon-key"></i> Log off</a></li>
                         }
                     }
                     else
@@ -85,9 +85,10 @@
                 <a href="#"><i class="icon icon-user"></i> <span>Admin</span> <span class="label label-important">2</span></a>
                 <ul>
                     <li><a href="~/ApplicationUsers/index">Changer Role</a></li>
-                    <li><a href="form-common.html">User Manager</a></li>
+                    <li><a href="form-common.html">User Manage</a></li>
                 </ul>
             </li>
+            <li> <a href="~/Tickets/index"><i class="icon icon-list-ul"></i> <span>Tickets</span></a> </li>
             <li> <a href="charts.html"><i class="icon icon-signal"></i> <span>Charts &amp; graphs</span></a> </li>
             <li> <a href="widgets.html"><i class="icon icon-inbox"></i> <span>Widgets</span></a> </li>
             <li><a href="tables.html"><i class="icon icon-th"></i> <span>Tables</span></a></li>

@@ -1,7 +1,8 @@
-﻿@model IEnumerable<MVC_BugTraker.Models.ApplicationUser>
+﻿@model MVC_BugTraker.Models.MyProfileViewModel
 @{
     ViewBag.Title = "MyProfile";
 }
+
 <div id="content">
     <div id="content-header">
         <div id="breadcrumb"> <a href="~/" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a></div>
@@ -16,40 +17,40 @@
             <div class="widget-content nopadding">
                 <form action="#" method="get" class="form-horizontal">
                     <div class="control-group">
-                        <label class="control-label">First Name :</label>
+                        <label class="control-label">Email :</label>
                         <div class="controls">
-                            <input type="text" class="span11" placeholder="First name" />
+                            @Html.TextBoxFor(m => m.Email, new { placeholder = "Email-address" })
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label">Last Name :</label>
+                        <label class="control-label">DisplyName :</label>
                         <div class="controls">
-                            <input type="text" class="span11" placeholder="Last name" />
+                            @Html.TextBoxFor(m => m.DisplyName, new { placeholder = "User-name" })
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label">Password input</label>
+                        <label class="control-label">Birth :</label>
                         <div class="controls">
-                            <input type="password" class="span11" placeholder="Enter Password" />
+                            @Html.TextBoxFor(m => m.Birth, new { placeholder = "Enter Password" })
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label">Company info :</label>
                         <div class="controls">
-                            <input type="text" class="span11" placeholder="Company name" />
+                            @Html.TextBoxFor(m => m.CompanyInfo, new { placeholder = "Company name" })
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label">Description field:</label>
                         <div class="controls">
-                            <input type="text" class="span11" />
+                            @Html.TextBoxFor(m => m.Description)
                             <span class="help-block">Description field</span>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label">Message</label>
+                        <label class="control-label">Message :</label>
                         <div class="controls">
-                            <textarea class="span11"></textarea>
+                            <textarea class="span6"></textarea>
                         </div>
                     </div>
                     <div class="form-actions">

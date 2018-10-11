@@ -12,14 +12,26 @@ namespace MVC_BugTraker.Models
         public string Description { get; set; }
         public DateTimeOffset Created { get; set; }
         public DateTimeOffset? Updated { get; set; }
-        public int ProjectId { get; set; }
-        public int TicketTyeId { get; set; }
-        public int TicketPriorityId { get; set; }
-        public int TicketStatusId { get; set; }
-        public int OwnerUserId { get; set; }
-        public int AssignedToUserId { get; set; }
 
-        public virtual Projects GetProjects { get; set; }
+        public int ProjectId { get; set; }
+        public virtual Projects Projects { get; set; }
+
+        public int TicketTypeId { get; set; }
+        public virtual TicketType TicketType { get; set; }
+
+        public int TicketPriorityId { get; set; }
+        public virtual TicketPriority TicketPriority { get; set; }
+
+        public int TicketStatusId { get; set; }
+        public virtual TicketStatus TicketStatus { get; set; }
+
+        public int OwnerUserId { get; set; }
+        public virtual ApplicationUser OwnerUser { get; set; }
+
+        public int AssignedToUserId { get; set; }
+        public virtual ApplicationUser AssignedToUser { get; set; }
+
+        
         public virtual ApplicationUser User { get; set; }
     }
 }
