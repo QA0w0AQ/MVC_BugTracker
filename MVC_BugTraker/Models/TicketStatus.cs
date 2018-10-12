@@ -11,5 +11,10 @@ namespace MVC_BugTraker.Models
         public string Name { get; set; }
 
         public virtual ICollection<Tickets> Tickets { get; set; }
+
+        public TicketStatus()
+        {
+            Tickets = new HashSet<Tickets>();
+        }
     }
 }

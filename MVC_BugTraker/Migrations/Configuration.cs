@@ -21,7 +21,6 @@ namespace MVC_BugTraker.Migrations
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
 
-
             if (!context.Roles.Any(r => r.Name == "Admin"))
             {
                 roleManager.Create(new IdentityRole { Name = "Admin" });
@@ -130,6 +129,25 @@ namespace MVC_BugTraker.Migrations
             {
                 userManager.AddToRole(SubM.Id, "Submitter");
             }
+
+            context.TicketType.AddOrUpdate(t => t.Name,
+                new TicketType { Name = "Bug Fixes" },
+                new TicketType { Name = "Software Update" },
+                new TicketType { Name = "Adding Helpers" },
+                new TicketType { Name = "Database Error" });
+
+            context.TicketPriority.AddOrUpdate(t => t.Name,
+               new TicketPriority { Name = "Low" },
+               new TicketPriority { Name = "Medium" },
+               new TicketPriority { Name = "High" },
+               new TicketPriority { Name = "Urgent" });
+
+            context.TicketStatus.AddOrUpdate(t => t.Name,
+              new TicketStatus { Name = "Not Started" },
+              new TicketStatus { Name = "In Progress" },
+              new TicketStatus { Name = "On Hold" },
+              new TicketStatus { Name = "Finished" });
+
         }
     }
 }

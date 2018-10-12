@@ -32,6 +32,6 @@ namespace MVC_BugTraker.Models
         public virtual ApplicationUser AssignedToUser { get; set; }
 
         
-        public virtual ApplicationUser User { get; set; }
+        public virtual ApplicationUser Users { get; set; }
     }
 }

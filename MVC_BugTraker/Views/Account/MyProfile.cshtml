@@ -19,7 +19,7 @@
                     <div class="control-group">
                         <label class="control-label">Email :</label>
                         <div class="controls">
-                            @Html.TextBoxFor(m => m.Email, new { placeholder = "Email-address" })
+                            @Html.TextBoxFor(m => m.Email, new { placeholder = @User.Identity.Name })
                         </div>
                     </div>
                     <div class="control-group">
@@ -29,9 +29,16 @@
                         </div>
                     </div>
                     <div class="control-group">
+                        <label class="control-label">Gender :</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(m => m.Birth, new { type = "radio", name = "gender", value = "male"}) Male<br />
+                            @Html.TextBoxFor(m => m.Birth, new { type = "radio", name = "gender", value = "female" }) Female<br />
+                        </div>
+                    </div>
+                    <div class="control-group">
                         <label class="control-label">Birth :</label>
                         <div class="controls">
-                            @Html.TextBoxFor(m => m.Birth, new { placeholder = "Enter Password" })
+                            @Html.TextBoxFor(m => m.Birth, new { placeholder = "Enter Password" , type = "date"})
                         </div>
                     </div>
                     <div class="control-group">
