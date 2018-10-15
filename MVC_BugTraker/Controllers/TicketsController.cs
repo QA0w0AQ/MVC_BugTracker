@@ -22,6 +22,11 @@ namespace MVC_BugTraker.Controllers
             return View(tickets.ToList());
         }
 
+        public ActionResult AdminIndex()
+        {
+            var tickets = db.Tickets.Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
+            return View("AdminIndex",tickets.ToList());
+        }
         [Authorize(Roles ="Submitter")]
         public ActionResult SubmitterIndex()
         {
@@ -29,41 +34,39 @@ namespace MVC_BugTraker.Controllers
             var tickets = db.Tickets.
                 Where(p=>p.OwnerUserId==userId).
                 Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
-            return View("index",tickets.ToList());
+            return View("SubmitterIndex",tickets.ToList());
         }
 
-        [Authorize(Roles = "ProjectManager,Developer")]
+        [Authorize(Roles = "ProjectManager")]
         public ActionResult PMIndex()
         {
-            //var project = db.Projects.ToList();
-            //foreach(var p in project)
-            //{
-            //    if (p.Users!=null)
-            //    {
-            //        string a = p.Id.ToString();
-            //        int x = 0;
-            //        x = int.Parse(a);
-            //        x = Convert.ToInt32(a);
-            //        List<int> list = new List<int>() { x };
-            //        list.Add(x);                   
-            //    }
-            //}
             var userId = User.Identity.GetUserId();
 
             var tickets = db.Users.Where(p => p.Id == userId).FirstOrDefault().
                  Projects.SelectMany(p => p.Tickets);
 
-            return View("index", tickets.ToList());
+            return View("SoloIndex", tickets.ToList());
         }
 
         [Authorize(Roles = "Developer")]
-        public ActionResult DelIndex()
+        public ActionResult DelIndex1()
+        {
+            var userId = User.Identity.GetUserId();
+
+            var tickets = db.Users.Where(p => p.Id == userId).FirstOrDefault().
+                 Projects.SelectMany(p => p.Tickets);
+
+            return View("Index", tickets.ToList());
+        }
+
+        [Authorize(Roles = "Developer")]
+        public ActionResult DelIndex2()
         {
             var userId = User.Identity.GetUserId();
             var tickets = db.Tickets.
                 Where(p => p.AssignedToUserId == userId).
                 Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
-            return View("index", tickets.ToList());
+            return View("SubmitterIndex", tickets.ToList());
         }
         // GET: Tickets/Details/5
         public ActionResult Details(int? id)
@@ -118,6 +121,7 @@ namespace MVC_BugTraker.Controllers
         }
 
         // GET: Tickets/Edit/5
+
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -136,23 +140,13 @@ namespace MVC_BugTraker.Controllers
             return View(tickets);
         }
 
-        // POST: Tickets/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,AssignedToUserId")] Tickets tickets)
         {
             if (ModelState.IsValid)
             {
-                //var ticket = db.Tickets.Where(p => p.Id == tickets.Id).FirstOrDefault();
-                //ticket.Updated = DateTime.Now;
-                //ticket.Description = tickets.Description;
-                //ticket.TicketPriorityId = tickets.TicketPriorityId;
-                //ticket.TicketStatusId = tickets.TicketStatusId;
-                //ticket.TicketTypeId = tickets.TicketTypeId;
-                //ticket.AssignedToUserId = tickets.AssignedToUserId;
-
                 db.Entry(tickets).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

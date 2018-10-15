@@ -92,19 +92,33 @@
             <li class="submenu">
                 <a href="#"><i class="icon icon-list-ul"></i> <span>Tickets</span> <span class="label label-important">2</span></a>
                 <ul>
+                    @if ((User.Identity.IsAuthenticated && User.IsInRole("Admin")))
+                    {
+                        <li><a href="~/Tickets/AdminIndex">All Tickets</a></li>
+                    }
                     @if ((User.Identity.IsAuthenticated && User.IsInRole("Submitter")))
                     {
                         <li><a href="~/Tickets/SubmitterIndex">My Tickets</a></li>
                     }
-                    @if ((User.Identity.IsAuthenticated && User.IsInRole("ProjectManager")) || (User.Identity.IsAuthenticated && User.IsInRole("Developer")))
+                    @if ((User.Identity.IsAuthenticated && User.IsInRole("ProjectManager")))
                     {
                         <li><a href="~/Tickets/PMIndex">My Projects' Tickets</a></li>
                     }
                     @if ((User.Identity.IsAuthenticated && User.IsInRole("Developer")))
                     {
-                        <li><a href="~/Tickets/DelIndex">Assigned Tickets</a></li>
+                        <li><a href="~/Tickets/DelIndex1">My Projects' Tickets</a></li>
                     }
-                    <li><a href="~/Tickets/index">All Tickets</a></li>
+                    @if ((User.Identity.IsAuthenticated && User.IsInRole("Developer")))
+                    {
+                        <li><a href="~/Tickets/DelIndex2">Assigned Tickets</a></li>
+                    }
+                    @if ((User.Identity.IsAuthenticated && User.IsInRole("Submitter"))||
+                        (User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))||
+                        (User.Identity.IsAuthenticated && User.IsInRole("Developer")))
+                    {
+                        <li><a href="~/Tickets/index">All Tickets</a></li>
+                    }
+                    
                 </ul>
             </li>
             <li> <a href="charts.html"><i class="icon icon-signal"></i> <span>Charts &amp; graphs</span></a> </li>

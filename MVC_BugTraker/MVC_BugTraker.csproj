@@ -420,6 +420,9 @@
     <Content Include="Views\Tickets\Edit.cshtml" />
     <Content Include="Views\Tickets\Index.cshtml" />
     <Content Include="Views\Tickets\Assign.cshtml" />
+    <Content Include="Views\Tickets\SubmitterIndex.cshtml" />
+    <Content Include="Views\Tickets\SoloIndex.cshtml" />
+    <Content Include="Views\Tickets\AdminIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
