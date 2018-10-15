@@ -212,8 +212,11 @@
     <Compile Include="Models\PersonalEmailService.cs" />
     <Compile Include="Models\Projects.cs" />
     <Compile Include="Models\ProjectsAssign.cs" />
+    <Compile Include="Models\TickectsHistory.cs" />
+    <Compile Include="Models\TicketAttachment.cs" />
     <Compile Include="Models\TicketPriority.cs" />
     <Compile Include="Models\Tickets.cs" />
+    <Compile Include="Models\TicketsComment.cs" />
     <Compile Include="Models\TicketStatus.cs" />
     <Compile Include="Models\TicketType.cs" />
     <Compile Include="Models\UserRoles.cs" />

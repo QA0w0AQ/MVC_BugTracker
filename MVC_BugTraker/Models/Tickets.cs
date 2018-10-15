@@ -32,6 +32,17 @@ namespace MVC_BugTraker.Models
         public virtual ApplicationUser AssignedToUser { get; set; }
 
         public virtual ICollection<ApplicationUser> Users { get; set; }
+        public virtual ICollection<TicketAttachment> Attachments { get; set; }
+        public virtual ICollection<TicketsComment> TicketsComments { get; set; }
+        public virtual ICollection<TickectsHistory> TickectsHistories { get; set; }
+
+        public Tickets()
+        {
+            Attachments = new HashSet<TicketAttachment>();
+            Users = new HashSet<ApplicationUser>();
+            TicketsComments = new HashSet<TicketsComment>();
+            TickectsHistories = new HashSet<TickectsHistory>();
+        }
 
     }
 }

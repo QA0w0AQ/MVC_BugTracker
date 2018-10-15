@@ -21,6 +21,9 @@ namespace MVC_BugTraker.Models
             Projects = new HashSet<Projects>();
             TicketsCreated = new HashSet<Tickets>();
             TicketsAssigned = new HashSet<Tickets>();
+            Attachments = new HashSet<TicketAttachment>();
+            TicketsComments = new HashSet<TicketsComment>();
+            TickectsHistories = new HashSet<TickectsHistory>();
         }
 
         public virtual ICollection<Projects> Projects { get; set; }
@@ -30,6 +33,12 @@ namespace MVC_BugTraker.Models
 
         [InverseProperty("AssignedToUser")]
         public virtual ICollection<Tickets> TicketsAssigned { get; set; }
+
+        public virtual ICollection<TicketAttachment> Attachments { get; set; }
+
+        public virtual ICollection<TicketsComment> TicketsComments { get; set; }
+
+        public virtual ICollection<TickectsHistory> TickectsHistories { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
@@ -57,6 +66,10 @@ namespace MVC_BugTraker.Models
         public DbSet<TicketPriority> TicketPriority { get; set;}
         public DbSet<TicketStatus> TicketStatus { get; set; }
         public DbSet<TicketType> TicketType { get; set; }
+        public DbSet<TicketAttachment> TicketAttachments { get; set; }
+        public DbSet<TicketsComment> TicketsComments { get; set; }
+        public DbSet<TickectsHistory> TickectsHistories { get; set; }
+
 
     }
 }
