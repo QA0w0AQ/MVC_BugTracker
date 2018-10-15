@@ -14,7 +14,7 @@ namespace MVC_BugTraker.Models
         public DateTimeOffset? Updated { get; set; }
 
         public int ProjectId { get; set; }
-        public virtual Projects Projects { get; set; }
+        public virtual Projects Project { get; set; }
 
         public int TicketTypeId { get; set; }
         public virtual TicketType TicketType { get; set; }
@@ -25,13 +25,13 @@ namespace MVC_BugTraker.Models
         public int TicketStatusId { get; set; }
         public virtual TicketStatus TicketStatus { get; set; }
 
-        public int OwnerUserId { get; set; }
+        public string OwnerUserId { get; set; }
         public virtual ApplicationUser OwnerUser { get; set; }
 
-        public int AssignedToUserId { get; set; }
+        public string AssignedToUserId { get; set; }
         public virtual ApplicationUser AssignedToUser { get; set; }
 
-        
-        public virtual ApplicationUser Users { get; set; }
+        public virtual ICollection<ApplicationUser> Users { get; set; }
+
     }
 }

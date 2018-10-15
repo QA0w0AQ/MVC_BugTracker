@@ -21,7 +21,7 @@
                         @Html.DisplayNameFor(model => model.Title)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Projects)
+                        @Html.DisplayNameFor(model => model.Project)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.OwnerUser)
@@ -55,13 +55,13 @@
                             @Html.DisplayFor(modelItem => item.Title)
                         </td>
                         <td style="text-align:center;">
-                            @Html.DisplayFor(modelItem => item.ProjectId)
+                            @Html.DisplayFor(modelItem => item.Project.Name)
                         </td>
                         <td style="text-align:center;">
-                            @Html.DisplayFor(modelItem => item.OwnerUserId)
+                            @Html.DisplayFor(modelItem => item.OwnerUser.DisplayName)
                         </td>
                         <td style="text-align:center;">
-                            @Html.DisplayFor(modelItem => item.AssignedToUser)
+                            @Html.DisplayFor(modelItem => item.AssignedToUser.DisplayName)
                         </td>
                         <td style="text-align:center;">
                             @Html.DisplayFor(modelItem => item.TicketStatus.Name)
@@ -83,7 +83,8 @@
                         <td>
                             @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
                             @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                            @Html.ActionLink("Delete", "Delete", new { id = item.Id }) |
+                            @Html.ActionLink("Assign ", "Assign", new { id = item.Id })
                         </td>
                     </tr>
                 }

@@ -7,6 +7,8 @@ namespace MVC_BugTraker.Models
 {
     public class Projects
     {
+        internal int id;
+
         public Projects()
         {
             Tickets = new HashSet<Tickets>();
