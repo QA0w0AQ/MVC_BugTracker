@@ -15,7 +15,7 @@ namespace MVC_BugTraker.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Tickets
+        #region Different Roles Index
         public ActionResult Index()
         {
             var tickets = db.Tickets.Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
@@ -27,6 +27,7 @@ namespace MVC_BugTraker.Controllers
             var tickets = db.Tickets.Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
             return View("AdminIndex",tickets.ToList());
         }
+
         [Authorize(Roles ="Submitter")]
         public ActionResult SubmitterIndex()
         {
@@ -45,7 +46,7 @@ namespace MVC_BugTraker.Controllers
             var tickets = db.Users.Where(p => p.Id == userId).FirstOrDefault().
                  Projects.SelectMany(p => p.Tickets);
 
-            return View("SoloIndex", tickets.ToList());
+            return View("AdminIndex", tickets.ToList());
         }
 
         [Authorize(Roles = "Developer")]
@@ -68,6 +69,7 @@ namespace MVC_BugTraker.Controllers
                 Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
             return View("SubmitterIndex", tickets.ToList());
         }
+        #endregion
         // GET: Tickets/Details/5
         public ActionResult Details(int? id)
         {
@@ -121,7 +123,6 @@ namespace MVC_BugTraker.Controllers
         }
 
         // GET: Tickets/Edit/5
-
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -140,22 +141,108 @@ namespace MVC_BugTraker.Controllers
             return View(tickets);
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,AssignedToUserId")] Tickets tickets)
+        public ActionResult Edit([Bind(Include = "Id,Title,Description,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,AssignedToUserId")] Tickets tickets)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(tickets).State = EntityState.Modified;
+                var MyTicket = db.Tickets.First(p => p.Id == tickets.Id);
+                MyTicket.Id = tickets.Id;
+                MyTicket.Title = tickets.Title;
+                MyTicket.Description = tickets.Description;
+                MyTicket.Updated = DateTimeOffset.Now;
+                MyTicket.TicketTypeId = tickets.TicketTypeId;
+                MyTicket.TicketPriorityId = tickets.TicketPriorityId;
+                MyTicket.TicketStatusId = tickets.TicketStatusId;
+
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name", tickets.Id);
-            ViewBag.OwnerUserId = new SelectList(db.Users, "Id", "Name", tickets.OwnerUserId);
             ViewBag.TicketPriorityId = new SelectList(db.TicketPriority, "Id", "Name", tickets.TicketPriorityId);
             ViewBag.TicketStatusId = new SelectList(db.TicketStatus, "Id", "Name", tickets.TicketStatusId);
             ViewBag.TicketTypeId = new SelectList(db.TicketType, "Id", "Name", tickets.TicketTypeId);
+            return View(tickets);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult ADEdit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Tickets tickets = db.Tickets.Find(id);
+            if (tickets == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name", tickets.Id);
+            ViewBag.TicketPriorityId = new SelectList(db.TicketPriority, "Id", "Name", tickets.TicketPriorityId);
+            ViewBag.TicketStatusId = new SelectList(db.TicketStatus, "Id", "Name", tickets.TicketStatusId);
+            ViewBag.TicketTypeId = new SelectList(db.TicketType, "Id", "Name", tickets.TicketTypeId);
+            return View("Edit",tickets);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ADEdit([Bind(Include = "Id,Title,Description,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,AssignedToUserId")] Tickets tickets)
+        {
+            if (ModelState.IsValid)
+            {
+                var MyTicket = db.Tickets.First(p => p.Id == tickets.Id);
+                MyTicket.Id = tickets.Id;
+                MyTicket.Title = tickets.Title;
+                MyTicket.Description = tickets.Description;
+                MyTicket.Updated = DateTimeOffset.Now;
+                MyTicket.TicketTypeId = tickets.TicketTypeId;
+                MyTicket.TicketPriorityId = tickets.TicketPriorityId;
+                MyTicket.TicketStatusId = tickets.TicketStatusId;
+                MyTicket.ProjectId = tickets.ProjectId;
+
+                db.SaveChanges();
+                return RedirectToAction("AdminIndex");
+            }
+            ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name", tickets.Id);
+            ViewBag.TicketPriorityId = new SelectList(db.TicketPriority, "Id", "Name", tickets.TicketPriorityId);
+            ViewBag.TicketStatusId = new SelectList(db.TicketStatus, "Id", "Name", tickets.TicketStatusId);
+            ViewBag.TicketTypeId = new SelectList(db.TicketType, "Id", "Name", tickets.TicketTypeId);
+            return View("Edit", tickets);
+        }
+
+        [Authorize(Roles = "Submitter")]
+        public ActionResult SBEdit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Tickets tickets = db.Tickets.Find(id);
+            if (tickets == null)
+            {
+                return HttpNotFound();
+            }
+            return View(tickets);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Submitter")]
+        public ActionResult SBEdit([Bind(Include = "Id,Title,Description,Updated")] Tickets tickets)
+        {
+            if (ModelState.IsValid)
+            {
+                var MyTicket = db.Tickets.First(p => p.Id == tickets.Id);
+                MyTicket.Id = tickets.Id;
+                MyTicket.Title = tickets.Title;
+                MyTicket.Description = tickets.Description;
+                MyTicket.Updated = DateTimeOffset.Now;
+
+                db.SaveChanges();
+                return RedirectToAction("SubmitterIndex");
+            }
             return View(tickets);
         }
 
