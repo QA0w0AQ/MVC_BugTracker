@@ -122,7 +122,7 @@ namespace MVC_BugTraker.Controllers
             return View(tickets);
         }
 
-        // GET: Tickets/Edit/5
+        #region PM And Dev Edit
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -166,7 +166,9 @@ namespace MVC_BugTraker.Controllers
             ViewBag.TicketTypeId = new SelectList(db.TicketType, "Id", "Name", tickets.TicketTypeId);
             return View(tickets);
         }
+        #endregion
 
+        #region Admin Edit
         [Authorize(Roles = "Admin")]
         public ActionResult ADEdit(int? id)
         {
@@ -212,7 +214,9 @@ namespace MVC_BugTraker.Controllers
             ViewBag.TicketTypeId = new SelectList(db.TicketType, "Id", "Name", tickets.TicketTypeId);
             return View("Edit", tickets);
         }
+        #endregion
 
+        #region Submitter Edit
         [Authorize(Roles = "Submitter")]
         public ActionResult SBEdit(int? id)
         {
@@ -245,8 +249,8 @@ namespace MVC_BugTraker.Controllers
             }
             return View(tickets);
         }
+        #endregion
 
-        // GET: Tickets/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -314,6 +318,62 @@ namespace MVC_BugTraker.Controllers
 
             return RedirectToAction("Index");
         }
+
+        //public ActionResult CreateComment(string comment,int? id)
+        //{
+        //    if (comment == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Tickets tickets = db.Tickets.Find(id);
+        //    if (tickets == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    if (string.IsNullOrWhiteSpace(comment))
+        //    {
+        //        TempData["ErrorMessage"] = "Comment is empty!";
+        //        return View("Details");
+        //    }
+        //    var c = new TicketsComment();
+        //    c.Created = DateTimeOffset.Now;
+        //    c.Users.DisplayName = User.Identity.GetUserId();
+        //    c.Comment = comment;
+        //    c.TicketsId = tickets.Id;
+
+        //    db.TicketsComments.Add(c);
+        //    db.SaveChanges();
+        //    return RedirectToAction("Details");
+        //}
+
+
+        [HttpPost]
+        public ActionResult CreateComment(int id, string comment)
+        {
+
+            var comments = db.Tickets.Where(p => p.Id == id).FirstOrDefault();
+
+            if (comments == null)
+            {
+                return HttpNotFound();
+            }
+            if (string.IsNullOrWhiteSpace(comment))
+            {
+                TempData["ErrorMessage"] = "Comment is empty!";
+                return View("Details", new { id });
+            }
+            var ticketsComment = new TicketsComment();
+                ticketsComment.UsersId = User.Identity.GetUserId();
+                ticketsComment.Created = DateTime.Now;
+                ticketsComment.TicketsId = comments.Id;
+                ticketsComment.Comment = comment;
+
+                db.TicketsComments.Add(ticketsComment);
+                db.SaveChanges();
+                return RedirectToAction("Details",new { id });
+            }
+
+        
 
         protected override void Dispose(bool disposing)
         {

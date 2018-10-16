@@ -31,9 +31,9 @@
                 <dd>
                     @Html.DisplayFor(model => model.Description)
                 </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.TicketPriority)
-                    </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.TicketPriority)
+                </dt>
 
                 <dd>
                     @Html.DisplayFor(model => model.TicketPriority.Name)
@@ -63,6 +63,13 @@
                     @Html.DisplayFor(model => model.Created)
                 </dd>
                 <dt>
+                    @Html.DisplayNameFor(model => model.Updated)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Updated)
+                </dd>
+                <dt>
                     @Html.DisplayNameFor(model => model.Project)
                 </dt>
 
@@ -71,7 +78,7 @@
                 </dd>
 
                 <dt>
-                    @Html.DisplayNameFor(model => model.OwnerUserId)
+                    @Html.DisplayNameFor(model => model.OwnerUser)
                 </dt>
 
                 <dd>
@@ -79,14 +86,46 @@
                 </dd>
 
                 <dt>
-                    @Html.DisplayNameFor(model => model.AssignedToUserId)
+                    @Html.DisplayNameFor(model => model.AssignedToUser)
                 </dt>
-
                 <dd>
                     @Html.DisplayFor(model => model.AssignedToUser.DisplayName)
                 </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.TicketsComments)
+                </dt>
+                <dd>
+                    @foreach (var TicketsComment in Model.TicketsComments)
+                    {
+                        <form>
+                            <p><b>
+                                @TicketsComment.Users.DisplayName :
+                            <b/></p>
+                            <p>
+                                @TicketsComment.Comment
+                            </p>
+                            <p class="col-md-offset-4"> ---@TicketsComment.Created.ToString("yyyy/MM/dd HH:mm");</p>
+                        </form>
+                    }
+                </dd>
             </dl>
         </div>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="col-lg-offset-2">
+                Submit your comment!
+            </div>
+            <div class="col-lg-offset-2">
+                @using (Html.BeginForm("CreateComment", "Tickets", new { id= Model.Id }, FormMethod.Post))
+                {
+                    <input type="hidden" name="Slug" value="@Model.TicketsComments" />
+                    <textarea name="comment" style="width:300px; height:80px;"></textarea>
+                    <br>
+                    <input type="submit" value="Submit" />
+                }
+            </div>
+        }
         <p>
             @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
             @Html.ActionLink("Back to List", "Index")

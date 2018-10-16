@@ -16,7 +16,7 @@ namespace MVC_BugTraker.Models
 
         public string Comment { get; set; }
 
-        public int UsersId { get; set; }
+        public string UsersId { get; set; }
         public virtual ApplicationUser Users { get; set; }
     }
 }
