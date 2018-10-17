@@ -130,7 +130,6 @@
             <div class="col-lg-offset-2">
                 @using (Html.BeginForm("CreateComment", "Tickets", new { id = Model.Id }, FormMethod.Post))
                 {
-                    <input type="hidden" name="Slug" value="@Model.TicketsComments" />
                     <textarea name="comment" style="width:300px; height:80px;"></textarea>
                     <br>
                     <input type="submit" value="Submit" />
@@ -157,12 +156,11 @@
             }
         </p>
 
-            @using (Html.BeginForm("CreateAttachment", "Tickets", new { id = Model.Id }, FormMethod.Post, new { enctype = "Multipart/form-data" }))
+            @using (Html.BeginForm("CreateAttachment", "Tickets", new { id = Model.Id },FormMethod.Post, new { enctype = "Multipart/form-data" }))
             {
-                <input name="image" type="file" class="form-control" id="fileUpload" />
-                <input type="hidden" name="Slug" value="@Model.Attachments" />
-                <textarea name="comment"></textarea>
-                <br>
+                <input name="image" type="file" class="form-control" id="fileUpload"/>
+                <textarea name="description"></textarea>
+                
                 <input type="submit" value="Attach File" />
             }
                 <dl class="dl-horizontal">
@@ -174,7 +172,8 @@
                         {
                         <div>
                             <img style="height: 25px; width: 25px; float: left; margin-right: 10px;" alt="image" src="~/Img/photo-album-icon-png.png">
-                            <a href="@Attachment.MediaURL">Download</a>
+                            <a href="@Attachment.MediaURL">@Attachment.FileName</a>
+                            <a href="@Url.Action("DownloadAttachment", "Tickets",new { id =Attachment.Id})" class="btn"><i class="fa fa-download"></i> Download</a>
                             <p>
                                 @Attachment.Description
                             </p>

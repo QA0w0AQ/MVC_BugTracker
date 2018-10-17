@@ -381,6 +381,7 @@ namespace MVC_BugTraker.Controllers
             }
            
             ticketsAttachment.Created = DateTime.Now;
+            ticketsAttachment.FileName = image.FileName;
             ticketsAttachment.Description = description;
             ticketsAttachment.TicketsId = attachments.Id;
             ticketsAttachment.UsersId = User.Identity.GetUserId();
@@ -390,6 +391,26 @@ namespace MVC_BugTraker.Controllers
             db.SaveChanges();
             return RedirectToAction("Details", new { id });
         }
+
+        public ActionResult DownloadAttachment(int id)
+        {
+            var attachments = db.TicketAttachments.Where(p => p.Id == id).FirstOrDefault();
+
+            string filepath = Server.MapPath("~/" + attachments.MediaURL);
+            byte[] filedata = System.IO.File.ReadAllBytes(filepath);
+            string contentType = MimeMapping.GetMimeMapping(filepath);
+
+            var cd = new System.Net.Mime.ContentDisposition
+            {
+                FileName = attachments.FileName,
+                Inline = false,
+            };
+
+            Response.AppendHeader("Content-Disposition", cd.ToString());
+
+            return File(filedata, contentType);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -13,7 +13,7 @@ namespace MVC_BugTraker.Models
         public virtual Tickets Tickets { get; set; }
         public string MediaURL { get; set; }
         public DateTimeOffset Created { get; set; }
-
+        public string FileName { get; set; }
         public string Description { get; set; }
 
         public string UsersId { get; set; }
