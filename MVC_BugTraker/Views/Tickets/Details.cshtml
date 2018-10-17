@@ -137,24 +137,50 @@
                 }
             </div>
         }
-            <p>
-                @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-                @if ((User.Identity.IsAuthenticated && User.IsInRole("Admin")))
-                {
-                    @Html.ActionLink("Back to List", "AdminIndex")
-                }
-                @if ((User.Identity.IsAuthenticated && User.IsInRole("ProjectManager")))
-                {
-                    @Html.ActionLink("Back to List", "PMIndex")
-                }
-                @if ((User.Identity.IsAuthenticated && User.IsInRole("Developer")))
-                {
-                    @Html.ActionLink("Back to List", "DelIndex2")
-                }
-                @if ((User.Identity.IsAuthenticated && User.IsInRole("Submitter")))
-                {
-                    @Html.ActionLink("Back to List", "SubmitterIndex")
-                }
-            </p>
-    </div>
+        <p>
+            @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+            @if ((User.Identity.IsAuthenticated && User.IsInRole("Admin")))
+            {
+                @Html.ActionLink("Back to List", "AdminIndex")
+            }
+            @if ((User.Identity.IsAuthenticated && User.IsInRole("ProjectManager")))
+            {
+                @Html.ActionLink("Back to List", "PMIndex")
+            }
+            @if ((User.Identity.IsAuthenticated && User.IsInRole("Developer")))
+            {
+                @Html.ActionLink("Back to List", "DelIndex2")
+            }
+            @if ((User.Identity.IsAuthenticated && User.IsInRole("Submitter")))
+            {
+                @Html.ActionLink("Back to List", "SubmitterIndex")
+            }
+        </p>
+
+            @using (Html.BeginForm("CreateAttachment", "Tickets", new { id = Model.Id }, FormMethod.Post, new { enctype = "Multipart/form-data" }))
+            {
+                <input name="image" type="file" class="form-control" id="fileUpload" />
+                <input type="hidden" name="Slug" value="@Model.Attachments" />
+                <textarea name="comment"></textarea>
+                <br>
+                <input type="submit" value="Attach File" />
+            }
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Attachments)
+                    </dt>
+                    <dd>
+                        @foreach (var Attachment in Model.Attachments)
+                        {
+                        <div>
+                            <img style="height: 25px; width: 25px; float: left; margin-right: 10px;" alt="image" src="~/Img/photo-album-icon-png.png">
+                            <a href="@Attachment.MediaURL">Download</a>
+                            <p>
+                                @Attachment.Description
+                            </p>
+                        </div>
+                        }
+                    </dd>
+                </dl>
+</div>
 </div>

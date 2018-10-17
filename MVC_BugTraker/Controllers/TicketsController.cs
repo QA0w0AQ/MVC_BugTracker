@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using MVC_BugTraker.Helper;
 using MVC_BugTraker.Models;
 
 namespace MVC_BugTraker.Controllers
@@ -361,6 +363,33 @@ namespace MVC_BugTraker.Controllers
         //    }
         //}
 
+        [HttpPost]
+        public ActionResult CreateAttachment(int id, string description, HttpPostedFileBase image)
+        {
+
+            var attachments = db.Tickets.Where(p => p.Id == id).FirstOrDefault();
+            var ticketsAttachment = new TicketAttachment();
+            if (attachments == null)
+            {
+                return HttpNotFound();
+            }
+            if (ImageUploadValidator.IsWebFriendlyImage(image))
+            {
+                var fileName = Path.GetFileName(image.FileName);
+                image.SaveAs(Path.Combine(Server.MapPath("~/Uploads/"), fileName));
+                ticketsAttachment.MediaURL = "/Uploads/" + fileName;
+            }
+           
+            ticketsAttachment.Created = DateTime.Now;
+            ticketsAttachment.Description = description;
+            ticketsAttachment.TicketsId = attachments.Id;
+            ticketsAttachment.UsersId = User.Identity.GetUserId();
+            
+
+            db.TicketAttachments.Add(ticketsAttachment);
+            db.SaveChanges();
+            return RedirectToAction("Details", new { id });
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)
