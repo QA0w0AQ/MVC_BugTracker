@@ -319,34 +319,6 @@ namespace MVC_BugTraker.Controllers
             return RedirectToAction("Index");
         }
 
-        //public ActionResult CreateComment(string comment,int? id)
-        //{
-        //    if (comment == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Tickets tickets = db.Tickets.Find(id);
-        //    if (tickets == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    if (string.IsNullOrWhiteSpace(comment))
-        //    {
-        //        TempData["ErrorMessage"] = "Comment is empty!";
-        //        return View("Details");
-        //    }
-        //    var c = new TicketsComment();
-        //    c.Created = DateTimeOffset.Now;
-        //    c.Users.DisplayName = User.Identity.GetUserId();
-        //    c.Comment = comment;
-        //    c.TicketsId = tickets.Id;
-
-        //    db.TicketsComments.Add(c);
-        //    db.SaveChanges();
-        //    return RedirectToAction("Details");
-        //}
-
-
         [HttpPost]
         public ActionResult CreateComment(int id, string comment)
         {
@@ -363,17 +335,31 @@ namespace MVC_BugTraker.Controllers
                 return View("Details", new { id });
             }
             var ticketsComment = new TicketsComment();
-                ticketsComment.UsersId = User.Identity.GetUserId();
-                ticketsComment.Created = DateTime.Now;
-                ticketsComment.TicketsId = comments.Id;
-                ticketsComment.Comment = comment;
+            ticketsComment.UsersId = User.Identity.GetUserId();
+            ticketsComment.Created = DateTime.Now;
+            ticketsComment.TicketsId = comments.Id;
+            ticketsComment.Comment = comment;
 
-                db.TicketsComments.Add(ticketsComment);
-                db.SaveChanges();
-                return RedirectToAction("Details",new { id });
-            }
+            db.TicketsComments.Add(ticketsComment);
+            db.SaveChanges();
+            return RedirectToAction("Details", new { id });
+        }
+        //[HttpPost]
+        //public ActionResult CreateComment([Bind(Include ="Id,TicketsId,created,comment,UserId")]TicketsComment comment)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var comments = db.Tickets.Where(p => p.Id == id).FirstOrDefault();
 
-        
+
+        //        comment.UsersId = User.Identity.GetUserId();
+        //        comment.TicketsId = comments.Id;
+        //        comment.Created = DateTimeOffset.Now;
+        //        db.TicketsComments.Add(comment);
+        //        db.SaveChanges();
+        //        return RedirectToAction("Details");
+        //    }
+        //}
 
         protected override void Dispose(bool disposing)
         {
