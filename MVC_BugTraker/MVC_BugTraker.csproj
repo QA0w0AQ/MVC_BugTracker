@@ -203,6 +203,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helper\HtmlHelpersExtensions.cs" />
     <Compile Include="Helper\ImageUploadValidator.cs" />
     <Compile Include="Helper\_IsAssign.cs" />
     <Compile Include="Migrations\Configuration.cs" />
