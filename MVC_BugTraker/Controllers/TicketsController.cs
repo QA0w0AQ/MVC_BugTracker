@@ -149,6 +149,7 @@ namespace MVC_BugTraker.Controllers
         {
             if (ModelState.IsValid)
             {
+                var changes =new List <TickectsHistory>();
                 var MyTicket = db.Tickets.First(p => p.Id == tickets.Id);
                 MyTicket.Id = tickets.Id;
                 MyTicket.Title = tickets.Title;
@@ -159,6 +160,27 @@ namespace MVC_BugTraker.Controllers
                 MyTicket.TicketStatusId = tickets.TicketStatusId;
 
 
+                var originalValues = db.Entry(MyTicket).OriginalValues;
+                var currentValues = db.Entry(MyTicket).CurrentValues;
+
+                foreach (var property in originalValues.PropertyNames)
+                {
+                    var originalValue = originalValues[property]?.ToString();
+                    var currentValue = currentValues[property]?.ToString();
+
+                    if (originalValue != currentValue)
+                    {
+                        var history = new TickectsHistory();
+                        history.Changed = DateTimeOffset.Now;
+                        history.NewValue = GetValueFromKey(property, currentValue);
+                        history.OldValue = GetValueFromKey(property, originalValue);
+                        history.Property = property;
+                        history.TicketsId = MyTicket.Id;
+                        history.UsersId = User.Identity.GetUserId();
+                        changes.Add(history);
+                    }
+                }
+                db.TickectsHistories.AddRange(changes);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -168,7 +190,18 @@ namespace MVC_BugTraker.Controllers
             ViewBag.TicketTypeId = new SelectList(db.TicketType, "Id", "Name", tickets.TicketTypeId);
             return View(tickets);
         }
+
+        private string GetValueFromKey(string propertyName, string key)
+        {
+            if (propertyName == "TicketTypeId")
+            {
+                return db.TicketType.Find(Convert.ToInt32(key)).Name;
+            }
+            return key;
+        }
+
         #endregion
+
 
         #region Admin Edit
         [Authorize(Roles = "Admin")]
