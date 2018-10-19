@@ -191,15 +191,6 @@ namespace MVC_BugTraker.Controllers
             return View(tickets);
         }
 
-        private string GetValueFromKey(string propertyName, string key)
-        {
-            if (propertyName == "TicketTypeId")
-            {
-                return db.TicketType.Find(Convert.ToInt32(key)).Name;
-            }
-            return key;
-        }
-
         #endregion
 
 
@@ -230,6 +221,7 @@ namespace MVC_BugTraker.Controllers
         {
             if (ModelState.IsValid)
             {
+                var changes = new List<TickectsHistory>();
                 var MyTicket = db.Tickets.First(p => p.Id == tickets.Id);
                 MyTicket.Id = tickets.Id;
                 MyTicket.Title = tickets.Title;
@@ -239,6 +231,28 @@ namespace MVC_BugTraker.Controllers
                 MyTicket.TicketPriorityId = tickets.TicketPriorityId;
                 MyTicket.TicketStatusId = tickets.TicketStatusId;
                 MyTicket.ProjectId = tickets.ProjectId;
+
+                var originalValues = db.Entry(MyTicket).OriginalValues;
+                var currentValues = db.Entry(MyTicket).CurrentValues;
+
+                foreach (var property in originalValues.PropertyNames)
+                {
+                    var originalValue = originalValues[property]?.ToString();
+                    var currentValue = currentValues[property]?.ToString();
+
+                    if (originalValue != currentValue)
+                    {
+                        var history = new TickectsHistory();
+                        history.Changed = DateTimeOffset.Now;
+                        history.NewValue = GetValueFromKey(property, currentValue);
+                        history.OldValue = GetValueFromKey(property, originalValue);
+                        history.Property = property;
+                        history.TicketsId = MyTicket.Id;
+                        history.UsersId = User.Identity.GetUserId();
+                        changes.Add(history);
+                    }
+                }
+                db.TickectsHistories.AddRange(changes);
 
                 db.SaveChanges();
                 return RedirectToAction("AdminIndex");
@@ -273,11 +287,34 @@ namespace MVC_BugTraker.Controllers
         {
             if (ModelState.IsValid)
             {
+                var changes = new List<TickectsHistory>();
                 var MyTicket = db.Tickets.First(p => p.Id == tickets.Id);
                 MyTicket.Id = tickets.Id;
                 MyTicket.Title = tickets.Title;
                 MyTicket.Description = tickets.Description;
                 MyTicket.Updated = DateTimeOffset.Now;
+
+                var originalValues = db.Entry(MyTicket).OriginalValues;
+                var currentValues = db.Entry(MyTicket).CurrentValues;
+
+                foreach (var property in originalValues.PropertyNames)
+                {
+                    var originalValue = originalValues[property]?.ToString();
+                    var currentValue = currentValues[property]?.ToString();
+
+                    if (originalValue != currentValue)
+                    {
+                        var history = new TickectsHistory();
+                        history.Changed = DateTimeOffset.Now;
+                        history.NewValue = GetValueFromKey(property, currentValue);
+                        history.OldValue = GetValueFromKey(property, originalValue);
+                        history.Property = property;
+                        history.TicketsId = MyTicket.Id;
+                        history.UsersId = User.Identity.GetUserId();
+                        changes.Add(history);
+                    }
+                }
+                db.TickectsHistories.AddRange(changes);
 
                 db.SaveChanges();
                 return RedirectToAction("SubmitterIndex");
@@ -285,6 +322,27 @@ namespace MVC_BugTraker.Controllers
             return View(tickets);
         }
         #endregion
+
+        private string GetValueFromKey(string propertyName, string key)
+        {
+            if (propertyName == "TicketTypeId")
+            {
+                return db.TicketType.Find(Convert.ToInt32(key)).Name;
+            }
+            if (propertyName == "TicketPriorityId")
+            {
+                return db.TicketPriority.Find(Convert.ToInt32(key)).Name;
+            }
+            if (propertyName == "TicketStatusId")
+            {
+                return db.TicketStatus.Find(Convert.ToInt32(key)).Name;
+            }
+            if (propertyName == "ProjectId")
+            {
+                return db.Projects.Find(Convert.ToInt32(key)).Id.ToString();
+            }
+            return key;
+        }
 
         public ActionResult Delete(int? id)
         {

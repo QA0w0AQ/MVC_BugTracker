@@ -102,10 +102,25 @@
             {
                 @Html.AntiForgeryToken()
 
-                <div class="form-actions no-color">
-                    <input type="submit" value="Delete" class="btn btn-default" /> |
-                    @Html.ActionLink("Back to List", "Index")
-                </div>
+            <div class="form-actions no-color">
+                <input type="submit" value="Delete" class="btn btn-default" /> |
+                @if ((User.Identity.IsAuthenticated && User.IsInRole("Admin")))
+                {
+                    @Html.ActionLink("Back to List", "AdminIndex")
+                }
+                @if ((User.Identity.IsAuthenticated && User.IsInRole("ProjectManager")))
+                {
+                    @Html.ActionLink("Back to List", "PMIndex")
+                }
+                @if ((User.Identity.IsAuthenticated && User.IsInRole("Developer")))
+                {
+                    @Html.ActionLink("Back to List", "DelIndex2")
+                }
+                @if ((User.Identity.IsAuthenticated && User.IsInRole("Submitter")))
+                {
+                    @Html.ActionLink("Back to List", "SubmitterIndex")
+                }
+            </div>
             }
         </div>
     </div>

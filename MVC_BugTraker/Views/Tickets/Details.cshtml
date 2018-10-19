@@ -122,25 +122,28 @@
                             }
                         </div>
                     }
-                    <p>
-                        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-                        @if ((User.Identity.IsAuthenticated && User.IsInRole("Admin")))
-                        {
-                            @Html.ActionLink("Back to List", "AdminIndex")
-                        }
-                        @if ((User.Identity.IsAuthenticated && User.IsInRole("ProjectManager")))
-                        {
-                            @Html.ActionLink("Back to List", "PMIndex")
-                        }
-                        @if ((User.Identity.IsAuthenticated && User.IsInRole("Developer")))
-                        {
-                            @Html.ActionLink("Back to List", "DelIndex2")
-                        }
-                        @if ((User.Identity.IsAuthenticated && User.IsInRole("Submitter")))
-                        {
-                            @Html.ActionLink("Back to List", "SubmitterIndex")
-                        }
-                    </p>
+                        <p>
+                            @if ((User.Identity.IsAuthenticated && User.IsInRole("Admin")))
+                            {
+                                @Html.ActionLink("Edit |", "ADEdit", new { id = Model.Id })
+                                @Html.ActionLink("Back to List", "AdminIndex")
+                            }
+                            @if ((User.Identity.IsAuthenticated && User.IsInRole("ProjectManager")))
+                            {
+                                @Html.ActionLink("Edit |", "Edit", new { id = Model.Id })
+                                @Html.ActionLink("Back to List", "PMIndex")
+                            }
+                            @if ((User.Identity.IsAuthenticated && User.IsInRole("Developer")))
+                            {
+                                @Html.ActionLink("Edit |", "Edit", new { id = Model.Id })
+                                @Html.ActionLink("Back to List", "DelIndex2")
+                            }
+                            @if ((User.Identity.IsAuthenticated && User.IsInRole("Submitter")))
+                            {
+                                @Html.ActionLink("Edit |", "SBEdit", new { id = Model.Id })
+                                @Html.ActionLink("Back to List", "SubmitterIndex")
+                            }
+                        </p>
                     <dl>
                         <dt>
                             @Html.DisplayNameFor(model => model.TicketsComments)
@@ -194,8 +197,6 @@
         </div>
         <hr />
         <h2>Changes to Ticket</h2>
-        <dl>
-            <dd>
                 <table id="mytable" class="table table-striped table-bordered" cellspacing="0">
                     <thead>
                         <tr>
@@ -218,28 +219,35 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.TickectsHistories){
-                        <tr>
-                            <td style="text-align:center;">
-                                @Html.DisplayFor(modelItem => item.Property)
-                            </td style="text-align:center;">
-                            <td style="text-align:center;">
-                                @Html.DisplayFor(modelItem => item.OldValue)
-                            </td>
-                            <td style="text-align:center;">
-                                @Html.DisplayFor(modelItem => item.NewValue)
-                            </td>
-                            <td style="text-align:center;">
-                                @Html.DisplayFor(modelItem => item.Changed)
-                            </td>
-                            <td style="text-align:center;">
-                                @Html.DisplayFor(modelItem => item.Users.DisplayName)
-                            </td>
-                        </tr>
+                        @foreach (var item in Model.TickectsHistories)
+                        {
+                            <tr>
+                                <td style="text-align:center;">
+                                    @Html.DisplayFor(modelItem => item.Property)
+                                </td>
+                                <td style="text-align:center;">
+                                    @Html.DisplayFor(modelItem => item.OldValue)
+                                </td>
+                                <td style="text-align:center;">
+                                    @Html.DisplayFor(modelItem => item.NewValue)
+                                </td>
+                                <td style="text-align:center;">
+                                    @Html.DisplayDate(item.Changed)
+                                </td>
+                                <td style="text-align:center;">
+                                    @Html.DisplayFor(modelItem => item.Users.DisplayName)
+                                </td>
+                            </tr>
                         }
                     </tbody>
                 </table>
-            </dd>
-            </dl>
     </div>
-        </div>
+</div>
+@section Scripts {
+
+    <script>
+        $('#mytable').DataTable();
+    </script>
+
+
+}
