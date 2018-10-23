@@ -5,7 +5,9 @@ using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using MVC_BugTraker.Helper;
@@ -391,6 +393,7 @@ namespace MVC_BugTraker.Controllers
             var ticket = db.Tickets.FirstOrDefault(p => p.Id == model.Id);
             var assignedUsers = ticket.Users.ToList();
 
+
             foreach (var user in assignedUsers)
             {
                 ticket.Users.Remove(user);
@@ -404,9 +407,22 @@ namespace MVC_BugTraker.Controllers
 
                     ticket.Users.Add(user);
                     ticket.AssignedToUserId = userId;
+                    var personalEmailService = new PersonalEmailService();
+
+                    var mailMessage = new MailMessage(
+                        WebConfigurationManager.AppSettings["emailto"], user.Email
+
+                        );
+                    mailMessage.Body = "Please confirm your tickect as soon as possible";
+                    mailMessage.Subject = "You have an assigned tickect";
+                    mailMessage.IsBodyHtml = true;
+                    personalEmailService.Send(mailMessage);
+
                 }
             }
-            
+
+              
+
             db.SaveChanges();
 
             return RedirectToAction("Index");
@@ -432,8 +448,9 @@ namespace MVC_BugTraker.Controllers
             ticketsComment.Created = DateTime.Now;
             ticketsComment.TicketsId = comments.Id;
             ticketsComment.Comment = comment;
-
+                
             db.TicketsComments.Add(ticketsComment);
+
             db.SaveChanges();
             return RedirectToAction("Details", new { id });
         }

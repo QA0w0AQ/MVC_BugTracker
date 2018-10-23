@@ -122,7 +122,8 @@
                             }
                         </div>
                     }
-                        <p>
+                    <br>
+                        <p><b>
                             @if ((User.Identity.IsAuthenticated && User.IsInRole("Admin")))
                             {
                                 @Html.ActionLink("Edit |", "ADEdit", new { id = Model.Id })
@@ -143,7 +144,7 @@
                                 @Html.ActionLink("Edit |", "SBEdit", new { id = Model.Id })
                                 @Html.ActionLink("Back to List", "SubmitterIndex")
                             }
-                        </p>
+                        </b></p>
                     <dl>
                         <dt>
                             @Html.DisplayNameFor(model => model.TicketsComments)
