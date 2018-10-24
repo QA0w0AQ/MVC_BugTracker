@@ -184,6 +184,20 @@ namespace MVC_BugTraker.Controllers
                 }
                 db.TickectsHistories.AddRange(changes);
                 db.SaveChanges();
+
+                if (MyTicket.AssignedToUser.Roles.Any(a => a.RoleId == "cdea5771-00b7-4def-a089-8968abffef2f"))
+                {
+                    var personalEmailService = new PersonalEmailService();
+
+                    var mailMessage = new MailMessage(
+                        WebConfigurationManager.AppSettings["emailto"], MyTicket.AssignedToUser.Email
+
+                        );
+                    mailMessage.Body = "Your ticket has changed, please confirm it as soon as possible";
+                    mailMessage.Subject = "Ticket status changed";
+                    mailMessage.IsBodyHtml = true;
+                    personalEmailService.Send(mailMessage);
+                }
                 return RedirectToAction("Index");
             }
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name", tickets.Id);
@@ -257,6 +271,20 @@ namespace MVC_BugTraker.Controllers
                 db.TickectsHistories.AddRange(changes);
 
                 db.SaveChanges();
+
+                if (MyTicket.AssignedToUser.Roles.Any(a => a.RoleId == "cdea5771-00b7-4def-a089-8968abffef2f"))
+                {
+                    var personalEmailService = new PersonalEmailService();
+
+                    var mailMessage = new MailMessage(
+                        WebConfigurationManager.AppSettings["emailto"], MyTicket.AssignedToUser.Email
+
+                        );
+                    mailMessage.Body = "Your ticket has changed, please confirm it as soon as possible";
+                    mailMessage.Subject = "Ticket status changed";
+                    mailMessage.IsBodyHtml = true;
+                    personalEmailService.Send(mailMessage);
+                }
                 return RedirectToAction("AdminIndex");
             }
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name", tickets.Id);
