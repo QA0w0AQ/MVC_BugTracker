@@ -490,6 +490,7 @@ namespace MVC_BugTraker.Controllers
 
             var comments = db.Tickets.Where(p => p.Id == id).FirstOrDefault();
 
+
             if (comments == null)
             {
                 return HttpNotFound();
@@ -504,10 +505,24 @@ namespace MVC_BugTraker.Controllers
             ticketsComment.Created = DateTime.Now;
             ticketsComment.TicketsId = comments.Id;
             ticketsComment.Comment = comment;
-                
-            db.TicketsComments.Add(ticketsComment);
 
+            db.TicketsComments.Add(ticketsComment);
             db.SaveChanges();
+
+            if (comments.AssignedToUser.Roles.Any(a => a.RoleId == "cdea5771-00b7-4def-a089-8968abffef2f"))
+            {
+                var personalEmailService = new PersonalEmailService();
+
+                var mailMessage = new MailMessage(
+                    WebConfigurationManager.AppSettings["emailto"], comments.AssignedToUser.Email
+
+                    );
+                mailMessage.Body = "You have a comment, please confirm it as soon as possible";
+                mailMessage.Subject = "New one comment";
+                mailMessage.IsBodyHtml = true;
+                personalEmailService.Send(mailMessage);
+            }
+
             return RedirectToAction("Details", new { id });
         }
         //[HttpPost]
@@ -553,6 +568,20 @@ namespace MVC_BugTraker.Controllers
 
             db.TicketAttachments.Add(ticketsAttachment);
             db.SaveChanges();
+
+            if (attachments.AssignedToUser.Roles.Any(a => a.RoleId == "cdea5771-00b7-4def-a089-8968abffef2f"))
+            {
+                var personalEmailService = new PersonalEmailService();
+
+                var mailMessage = new MailMessage(
+                    WebConfigurationManager.AppSettings["emailto"], attachments.AssignedToUser.Email
+
+                    );
+                mailMessage.Body = "You have a attachment, please confirm it as soon as possible";
+                mailMessage.Subject = "New one attachment";
+                mailMessage.IsBodyHtml = true;
+                personalEmailService.Send(mailMessage);
+            }
             return RedirectToAction("Details", new { id });
         }
 
