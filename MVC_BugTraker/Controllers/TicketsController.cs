@@ -371,7 +371,7 @@ namespace MVC_BugTraker.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "Admin,ProjectManager")]
+        [Authorize(Roles = "Admin")]
         public ActionResult Assign(int id)
         {
             var model = new ProjectsAssign();
@@ -386,8 +386,25 @@ namespace MVC_BugTraker.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "ProjectManager")]
+        public ActionResult PMAssign(int id)
+        {
+            var model = new ProjectsAssign();
+
+            model.Id = id;
+            var ticket = db.Tickets.FirstOrDefault(p => p.Id == id);
+            var users = db.Users.ToList();
+            var DelUsers = users.Where(p => p.Roles.Any(a=>a.RoleId== "cdea5771-00b7-4def-a089-8968abffef2f"));
+            
+            var userIdsAssignedToProject = ticket.Users.Select(p => p.Id).ToList();
+
+            model.UserList = new MultiSelectList(DelUsers, "Id", "DisplayName", userIdsAssignedToProject);
+
+            return View("PMAssign", model);
+        }
+
         [HttpPost]
-        [Authorize(Roles = "Admin,ProjectManager")]
+        [Authorize(Roles = "Admin")]
         public ActionResult Assign(ProjectsAssign model)
         {
             var ticket = db.Tickets.FirstOrDefault(p => p.Id == model.Id);
@@ -421,11 +438,50 @@ namespace MVC_BugTraker.Controllers
                 }
             }
 
-              
+            db.SaveChanges();
+
+            return RedirectToAction("AdminIndex");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "ProjectManager")]
+        public ActionResult PMAssign(ProjectsAssign model)
+        {
+            var ticket = db.Tickets.FirstOrDefault(p => p.Id == model.Id);
+            var assignedUsers = ticket.Users.ToList();
+            var delUsers = assignedUsers.Where(p => p.Roles.Any(a => a.RoleId == "cdea5771-00b7-4def-a089-8968abffef2f"));
+
+
+            foreach (var user in delUsers)
+            {
+                ticket.Users.Remove(user);
+            }
+
+            if (model.SelectedUsers != null)
+            {
+                foreach (var userId in model.SelectedUsers)
+                {
+                    var user = db.Users.FirstOrDefault(p => p.Id == userId);
+
+                    ticket.Users.Add(user);
+                    ticket.AssignedToUserId = userId;
+                    var personalEmailService = new PersonalEmailService();
+
+                    var mailMessage = new MailMessage(
+                        WebConfigurationManager.AppSettings["emailto"], user.Email
+
+                        );
+                    mailMessage.Body = "Please confirm your tickect as soon as possible";
+                    mailMessage.Subject = "You have an assigned tickect";
+                    mailMessage.IsBodyHtml = true;
+                    personalEmailService.Send(mailMessage);
+
+                }
+            }
 
             db.SaveChanges();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("PMIndex");
         }
 
         [HttpPost]

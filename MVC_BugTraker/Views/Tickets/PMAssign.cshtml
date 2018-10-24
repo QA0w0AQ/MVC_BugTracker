@@ -1,7 +1,7 @@
 ﻿@model MVC_BugTraker.Models.ProjectsAssign
 
 @{
-    ViewBag.Title = "Assign";
+    ViewBag.Title = "PMAssign";
 }
 <div id="content">
 
@@ -17,10 +17,9 @@
 
             <input type="submit" value="Submit" class="btn btn-success" />
         }
-
-        @if ((User.Identity.IsAuthenticated && User.IsInRole("Admin")))
+        @if ((User.Identity.IsAuthenticated && User.IsInRole("ProjectManager")))
         {
-            @Html.ActionLink("Back to List", "AdminIndex")
+            @Html.ActionLink("Back to List", "PMIndex")
         }
 
     </div>

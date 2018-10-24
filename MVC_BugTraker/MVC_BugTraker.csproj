@@ -429,6 +429,7 @@
     <Content Include="Views\Tickets\SubmitterIndex.cshtml" />
     <Content Include="Views\Tickets\AdminIndex.cshtml" />
     <Content Include="Views\Tickets\SBEdit.cshtml" />
+    <Content Include="Views\Tickets\PMAssign.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
