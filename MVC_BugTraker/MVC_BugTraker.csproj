@@ -205,9 +205,11 @@
     </Compile>
     <Compile Include="Helper\HtmlHelpersExtensions.cs" />
     <Compile Include="Helper\ImageUploadValidator.cs" />
+    <Compile Include="Helper\modelUsers.cs" />
     <Compile Include="Helper\_IsAssign.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\DashBaord.cs" />
     <Compile Include="Models\EmailModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />

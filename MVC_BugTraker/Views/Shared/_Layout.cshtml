@@ -77,20 +77,28 @@
         <ul>
             <li class="active"><a href="/"><i class="icon icon-home"></i> <span>Dashboard</span></a> </li>
             <li class="submenu">
-                <a href="#"><i class="icon icon-tasks"></i> <span>Projects</span> <span class="label label-important">1</span></a>
+                <a href="#"><i class="icon  icon-hdd"></i> <span>Demo Profiles</span><i class="icon icon-chevron-down" style="float:right"></i></a>
+                <ul>
+                    <li><a href="#">Admin</a></li>
+                    <li><a href="#">Project Manage</a></li>
+                    <li><a href="#">Developer</a></li>
+                    <li><a href="#l">Submitter</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="#"><i class="icon icon-tasks"></i> <span>Projects</span><i class="icon icon-chevron-down" style="float:right"></i></a>
                 <ul>
                     <li><a href="~/Projects/index">Create Project</a></li>
                 </ul>
             </li>
             <li class="submenu">
-                <a href="#"><i class="icon icon-user"></i> <span>Admin</span> <span class="label label-important">2</span></a>
+                <a href="#"><i class="icon icon-user"></i> <span>Admin</span><i class="icon icon-chevron-down" style="float:right"></i></a>
                 <ul>
                     <li><a href="~/ApplicationUsers/index">Changer Role</a></li>
-                    <li><a href="form-common.html">User Manage</a></li>
                 </ul>
             </li>
             <li class="submenu">
-                <a href="#"><i class="icon icon-list-ul"></i> <span>Tickets</span> <span class="label label-important">2</span></a>
+                <a href="#"><i class="icon icon-list-ul"></i> <span>Tickets</span><i class="icon icon-chevron-down" style="float:right"></i></a>
                 <ul>
                     @if ((User.Identity.IsAuthenticated && User.IsInRole("Admin")))
                     {
@@ -112,13 +120,13 @@
                     {
                         <li><a href="~/Tickets/DelIndex2">Assigned Tickets</a></li>
                     }
-                    @if ((User.Identity.IsAuthenticated && User.IsInRole("Submitter"))||
-                        (User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))||
+                    @if ((User.Identity.IsAuthenticated && User.IsInRole("Submitter")) ||
+                        (User.Identity.IsAuthenticated && User.IsInRole("ProjectManager")) ||
                         (User.Identity.IsAuthenticated && User.IsInRole("Developer")))
                     {
                         <li><a href="~/Tickets/index">All Tickets</a></li>
                     }
-                    
+
                 </ul>
             </li>
             <li> <a href="charts.html"><i class="icon icon-signal"></i> <span>Charts &amp; graphs</span></a> </li>
@@ -167,8 +175,8 @@
                 <div class="progress progress-mini active progress-striped">
                     <div style="width: 87%;" class="bar"></div>
                 </div>
-                <span class="percent">87%</span>
-                <div class="stat">604.44 / 4000 MB</div>
+                <span class="percent">10%</span>
+                <div class="stat">400 / 4000 MB</div>
             </li>
         </ul>
     </div>
@@ -228,5 +236,8 @@
         }
     </script>
     @RenderSection("Scripts", false)
+    @*<script>
+        $(".icon-chevron-down").toggleClass("icon-chevron-up")
+    </script>*@
 </body>
 </html>
