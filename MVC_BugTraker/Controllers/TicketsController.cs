@@ -209,7 +209,6 @@ namespace MVC_BugTraker.Controllers
 
         #endregion
 
-
         #region Admin Edit
         [Authorize(Roles = "Admin")]
         public ActionResult ADEdit(int? id)

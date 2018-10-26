@@ -117,5 +117,10 @@ namespace MVC_BugTraker
         {
             return new ApplicationSignInManager(context.GetUserManager<ApplicationUserManager>(), context.Authentication);
         }
+
+        internal Task SignInAsync(IQueryable<bool> user, bool v1, bool v2)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

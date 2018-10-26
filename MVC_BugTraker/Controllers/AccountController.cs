@@ -96,6 +96,56 @@ namespace MVC_BugTraker.Controllers
             }
         }
 
+        private ApplicationDbContext db = new ApplicationDbContext();
+
+        [AllowAnonymous]
+        public ActionResult ADLogin()
+        {
+            //STEP 1: Find the user that you want to log in from the database
+            var user = db.Users.Where(p => p.UserName == "admin@gmail.com").FirstOrDefault();
+            //STEP 2: Call the logout function
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            //STEP 3: Call the login function
+            SignInManager.SignIn(user, false, false);
+            return RedirectToAction("Index", "Home");
+        }
+
+        [AllowAnonymous]
+        public ActionResult PMLogin()
+        {
+            //STEP 1: Find the user that you want to log in from the database
+            var user = db.Users.Where(p => p.UserName == "ProjectManager@gmail.com").FirstOrDefault();
+            //STEP 2: Call the logout function
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            //STEP 3: Call the login function
+            SignInManager.SignIn(user, false, false);
+            return RedirectToAction("Index", "Home");
+        }
+
+        [AllowAnonymous]
+        public ActionResult DelLogin()
+        {
+            //STEP 1: Find the user that you want to log in from the database
+            var user = db.Users.Where(p => p.UserName == "Developer@gmail.com").FirstOrDefault();
+            //STEP 2: Call the logout function
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            //STEP 3: Call the login function
+            SignInManager.SignIn(user, false, false);
+            return RedirectToAction("Index", "Home");
+        }
+
+        [AllowAnonymous]
+        public ActionResult SBLogin()
+        {
+            //STEP 1: Find the user that you want to log in from the database
+            var user = db.Users.Where(p => p.UserName == "Submitter@gmail.com").FirstOrDefault();
+            //STEP 2: Call the logout function
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            //STEP 3: Call the login function
+            SignInManager.SignIn(user, false, false);
+            return RedirectToAction("Index", "Home");
+        }
+
         //
         // GET: /Account/VerifyCode
         [AllowAnonymous]
@@ -308,8 +358,6 @@ namespace MVC_BugTraker.Controllers
             var factorOptions = userFactors.Select(purpose => new SelectListItem { Text = purpose, Value = purpose }).ToList();
             return View(new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
-
-        //
         // POST: /Account/SendCode
         [HttpPost]
         [AllowAnonymous]

@@ -15,7 +15,7 @@ namespace MVC_BugTraker.Controllers
         public ActionResult Index()
         {
             var userId = User.Identity.GetUserId();
-            var user = db.Users.FirstOrDefault(p => p.Id == userId);
+            
            var DashBaord = new DashBaord();
 
             DashBaord.TotallUsers = db.Users.Count();
