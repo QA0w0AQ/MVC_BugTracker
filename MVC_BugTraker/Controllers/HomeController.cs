@@ -14,14 +14,16 @@ namespace MVC_BugTraker.Controllers
 
         public ActionResult Index()
         {
-            var UserId = User.Identity.GetUserId();
-            var user = db.Users.FirstOrDefault(p => p.Id == UserId);
+            var userId = User.Identity.GetUserId();
+            var user = db.Users.FirstOrDefault(p => p.Id == userId);
            var DashBaord = new DashBaord();
+
             DashBaord.TotallUsers = db.Users.Count();
             DashBaord.TotallProjects = db.Projects.Count();
             DashBaord.TotallTickets = db.Tickets.Count();
             DashBaord.TotallComments = db.TicketsComments.Count();
-            DashBaord.UserTickets = user.TicketsCreated.Count();
+            DashBaord.UserTickets = db.Tickets.Where(p => p.OwnerUserId == userId).Count();
+            DashBaord.AssignedTickets = db.Tickets.Where(p => p.AssignedToUserId == userId).Count();
 
             return View(DashBaord);
         }
