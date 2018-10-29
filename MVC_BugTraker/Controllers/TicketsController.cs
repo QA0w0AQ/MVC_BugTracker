@@ -186,7 +186,8 @@ namespace MVC_BugTraker.Controllers
                 db.TickectsHistories.AddRange(changes);
                 db.SaveChanges();
 
-                if (MyTicket.AssignedToUser.Roles.Any(a => a.RoleId == "cdea5771-00b7-4def-a089-8968abffef2f"))
+                var devId = db.Roles.Where(p => p.Name == "Developer").Select(p => p.Id).FirstOrDefault();
+                if (MyTicket.AssignedToUser.Roles.Any(p=>p.RoleId==devId))
                 {
                     var personalEmailService = new PersonalEmailService();
 
