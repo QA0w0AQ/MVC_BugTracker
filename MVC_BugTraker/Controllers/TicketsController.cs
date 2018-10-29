@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using MVC_BugTraker.Helper;
 using MVC_BugTraker.Models;
 
@@ -29,17 +30,17 @@ namespace MVC_BugTraker.Controllers
         public ActionResult AdminIndex()
         {
             var tickets = db.Tickets.Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
-            return View("AdminIndex",tickets.ToList());
+            return View("AdminIndex", tickets.ToList());
         }
 
-        [Authorize(Roles ="Submitter")]
+        [Authorize(Roles = "Submitter")]
         public ActionResult SubmitterIndex()
         {
             var userId = User.Identity.GetUserId();
             var tickets = db.Tickets.
-                Where(p=>p.OwnerUserId==userId).
+                Where(p => p.OwnerUserId == userId).
                 Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
-            return View("SubmitterIndex",tickets.ToList());
+            return View("SubmitterIndex", tickets.ToList());
         }
 
         [Authorize(Roles = "ProjectManager")]
@@ -92,7 +93,7 @@ namespace MVC_BugTraker.Controllers
         // GET: Tickets/Create
         public ActionResult Create()
         {
-            ViewBag.ProjectId = new SelectList(db.Projects,"Id", "Name");
+            ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name");
             ViewBag.TicketPriorityId = new SelectList(db.TicketPriority, "Id", "Name");
             ViewBag.TicketStatusId = new SelectList(db.TicketStatus, "Id", "Name");
             ViewBag.TicketTypeId = new SelectList(db.TicketType, "Id", "Name");
@@ -151,7 +152,7 @@ namespace MVC_BugTraker.Controllers
         {
             if (ModelState.IsValid)
             {
-                var changes =new List <TickectsHistory>();
+                var changes = new List<TickectsHistory>();
                 var MyTicket = db.Tickets.First(p => p.Id == tickets.Id);
                 MyTicket.Id = tickets.Id;
                 MyTicket.Title = tickets.Title;
@@ -226,7 +227,7 @@ namespace MVC_BugTraker.Controllers
             ViewBag.TicketPriorityId = new SelectList(db.TicketPriority, "Id", "Name", tickets.TicketPriorityId);
             ViewBag.TicketStatusId = new SelectList(db.TicketStatus, "Id", "Name", tickets.TicketStatusId);
             ViewBag.TicketTypeId = new SelectList(db.TicketType, "Id", "Name", tickets.TicketTypeId);
-            return View("Edit",tickets);
+            return View("Edit", tickets);
         }
 
         [Authorize(Roles = "Admin")]
@@ -417,12 +418,14 @@ namespace MVC_BugTraker.Controllers
         public ActionResult PMAssign(int id)
         {
             var model = new ProjectsAssign();
+            var aa = new IdentityRole();
+            var devId = db.Roles.Where(p => p.Name == "Developer").Select(p => p.Id).FirstOrDefault();
 
             model.Id = id;
             var ticket = db.Tickets.FirstOrDefault(p => p.Id == id);
             var users = db.Users.ToList();
-            var DelUsers = users.Where(p => p.Roles.Any(a=>a.RoleId== "cdea5771-00b7-4def-a089-8968abffef2f"));
-            
+            var DelUsers = db.Users.Where(p => p.Roles.Any(q => q.RoleId == devId));
+
             var userIdsAssignedToProject = ticket.Users.Select(p => p.Id).ToList();
 
             model.UserList = new MultiSelectList(DelUsers, "Id", "DisplayName", userIdsAssignedToProject);
@@ -476,7 +479,8 @@ namespace MVC_BugTraker.Controllers
         {
             var ticket = db.Tickets.FirstOrDefault(p => p.Id == model.Id);
             var assignedUsers = ticket.Users.ToList();
-            var delUsers = assignedUsers.Where(p => p.Roles.Any(a => a.RoleId == "cdea5771-00b7-4def-a089-8968abffef2f"));
+            var devId = db.Roles.Where(p => p.Name == "Developer").Select(p => p.Id).FirstOrDefault();
+            var delUsers = assignedUsers.Where(p => p.Roles.Any(r => r.RoleId == devId));
 
 
             foreach (var user in delUsers)
@@ -536,7 +540,8 @@ namespace MVC_BugTraker.Controllers
             db.TicketsComments.Add(ticketsComment);
             db.SaveChanges();
 
-            if (comments.AssignedToUser.Roles.Any(a => a.RoleId == "cdea5771-00b7-4def-a089-8968abffef2f"))
+            var devId = db.Roles.Where(p => p.Name == "Developer").Select(p => p.Id).FirstOrDefault();
+            if (comments.AssignedToUser != null && comments.AssignedToUser.Roles.Any(p => p.RoleId == devId))
             {
                 var personalEmailService = new PersonalEmailService();
 
@@ -585,18 +590,19 @@ namespace MVC_BugTraker.Controllers
                 image.SaveAs(Path.Combine(Server.MapPath("~/Uploads/"), fileName));
                 ticketsAttachment.MediaURL = "/Uploads/" + fileName;
             }
-           
+
             ticketsAttachment.Created = DateTime.Now;
             ticketsAttachment.FileName = image.FileName;
             ticketsAttachment.Description = description;
             ticketsAttachment.TicketsId = attachments.Id;
             ticketsAttachment.UsersId = User.Identity.GetUserId();
-            
+
 
             db.TicketAttachments.Add(ticketsAttachment);
             db.SaveChanges();
 
-            if (attachments.AssignedToUser.Roles.Any(a => a.RoleId == "cdea5771-00b7-4def-a089-8968abffef2f"))
+            var devId = db.Roles.Where(p => p.Name == "Developer").Select(p => p.Id).FirstOrDefault();
+            if (attachments.AssignedToUser != null && attachments.AssignedToUser.Roles.Any(p => p.RoleId == devId))
             {
                 var personalEmailService = new PersonalEmailService();
 
